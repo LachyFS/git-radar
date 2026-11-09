@@ -753,7 +753,9 @@ export function ParallelRepoAnalysisResults({
                         {item.repoOwner}/{item.repoName}
                       </span>
                       <div className="flex items-center gap-2 mt-1">
-                        <SkillBadge level={item.result.skillLevel} />
+                        <Badge variant="outline" className={getSkillLevelColor(item.result.skillLevel)}>
+                          {item.result.skillLevel}
+                        </Badge>
                         <Badge variant="outline" className="text-xs">
                           {item.result.codeQuality} quality
                         </Badge>

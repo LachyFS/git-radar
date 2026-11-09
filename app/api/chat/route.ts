@@ -274,7 +274,7 @@ async function searchGitHubProfiles(query: string, token: string | null, numResu
 }
 
 // Valid Exa category types
-type ExaCategory = "company" | "research paper" | "news" | "pdf" | "github" | "tweet" | "personal site" | "linkedin profile" | "financial report";
+type ExaCategory = "company" | "news" | "personal site" | "financial report" | "publication" | "people";
 
 // Exa web search and scrape tool - can search and scrape any URL
 async function webSearchAndScrape(query: string, options?: {
@@ -320,7 +320,8 @@ async function searchPeople(query: string, options?: {
   try {
     const result = await exa.searchAndContents(query, {
       numResults: options?.numResults || 20,
-      category: "linkedin profile" as ExaCategory,
+      category: "people",
+      includeDomains: ["linkedin.com"],
       type: options?.type || "auto",
       text: { maxCharacters: 1500 },
     });
@@ -351,7 +352,7 @@ async function searchGitHubExa(query: string, options?: {
   try {
     const result = await exa.searchAndContents(query, {
       numResults: options?.numResults || 20,
-      category: "github" as ExaCategory,
+      includeDomains: ["github.com"],
       type: options?.type || "auto",
       text: { maxCharacters: 1500 },
     });
@@ -926,7 +927,7 @@ You have access to these tools:
    - NOTE: This takes 1-3 minutes to run as it performs deep analysis.
 
 **General web tools:**
-6. **webSearch**: Search the entire web for any content - articles, blog posts, portfolio sites, personal websites, documentation, etc. Can filter to specific domains, exclude domains, or use specialized categories for targeted searches. Supports categories like 'linkedin profile', 'github', 'company', 'news', 'personal site', 'research paper', etc.
+6. **webSearch**: Search the entire web for any content - articles, blog posts, portfolio sites, personal websites, documentation, etc. Can filter to specific domains, exclude domains, or use specialized categories for targeted searches. Supports 'people', 'company', 'news', 'personal site', 'publication', and 'financial report'. Use domain filters for sites such as GitHub and LinkedIn.
 
 7. **searchLinkedInProfiles**: Search for LinkedIn profiles using Exa AI's specialized people category. Best for finding professionals by name, title, company, or skills. Use this to find candidates' LinkedIn profiles for additional context.
 
@@ -1051,7 +1052,7 @@ Be conversational but concise. Let the tool UI do the heavy lifting for displayi
           excludeDomains: z.array(z.string()).optional().describe("Exclude results from these domains, e.g. ['pinterest.com']"),
           numResults: z.number().optional().describe("Number of results to return (default 10, max 20)"),
           type: z.enum(["keyword", "neural", "auto"]).optional().describe("Search type: 'keyword' for exact matches, 'neural' for semantic search, 'auto' to let Exa decide (default)"),
-          category: z.enum(["company", "research paper", "news", "pdf", "github", "tweet", "personal site", "linkedin profile", "financial report"]).optional().describe("Category filter for specialized searches. Use 'linkedin profile' for people, 'github' for code/repos, 'company' for businesses, 'news' for articles, 'personal site' for portfolios"),
+          category: z.enum(["company", "news", "personal site", "financial report", "publication", "people"]).optional().describe("Category filter for specialized searches. Use 'people' for profiles, 'company' for businesses, 'news' for articles, 'personal site' for portfolios, or 'publication' for research. Use includeDomains for GitHub or LinkedIn."),
         }),
         execute: async ({ query, includeDomains, excludeDomains, numResults, type, category }) => {
           return webSearchAndScrape(query, { includeDomains, excludeDomains, numResults, type, category });
