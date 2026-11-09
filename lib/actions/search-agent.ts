@@ -1,7 +1,7 @@
 "use server";
 
 import Exa from "exa-js";
-import { streamText, tool } from "ai";
+import { streamText, tool, stepCountIs } from "ai";
 import { z } from "zod";
 import { getRelatedGitHubUsers } from "./github-analyze";
 
@@ -406,7 +406,7 @@ export async function* searchWithProgress(
       system: getAgentSystemPrompt(config),
       prompt: researchPrompt,
       tools,
-      maxSteps,
+      stopWhen: stepCountIs(maxSteps),
     });
 
     // Stream the full response to capture tool calls

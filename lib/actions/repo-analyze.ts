@@ -5,7 +5,6 @@ import { streamText, tool, stepCountIs, generateObject } from "ai";
 import { z } from "zod";
 import { Writable } from "stream";
 import { Octokit } from "octokit";
-import { schema } from "@vercel/sandbox/dist/utils/get-credentials";
 
 // ============================================================================
 // TYPES & SCHEMAS
@@ -586,6 +585,7 @@ export async function* analyzeRepositoryWithProgress(
   let sandbox: Sandbox;
   try {
     sandbox = await Sandbox.create({
+      persistent: false,
       source: {
         url: repoUrl.endsWith(".git") ? repoUrl : `${repoUrl}.git`,
         type: "git",
